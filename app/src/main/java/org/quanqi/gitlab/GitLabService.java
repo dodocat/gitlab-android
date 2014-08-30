@@ -469,5 +469,94 @@ public interface GitLabService {
     @GET("/projects/{id}/hooks/{hook_id}")
     public void getProjectHook(String id, int hook_id);
 
+    /**
+     * Add project hook
+     * <p/>
+     * Adds a hook to a specified project.
+     * <p/>
+     * POST /projects/:id/hooks
+     * <p/>
+     *
+     * @param id                    (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param url                   (required) - The hook URL
+     * @param push_events           - Trigger hook on push events
+     * @param issues_events         - Trigger hook on issues events
+     * @param merge_requests_events - Trigger hook on merge_requests events
+     */
+    @POST("/projects/{id}/hooks")
+    public void addProjectHook(
+            @Path("id") String id,
+            @Field("url") String url,
+            @Field("push_events") boolean push_events,
+            @Field("issues_events") boolean issues_events,
+            @Field("merge_request_events") boolean merge_requests_events);
+
+    /**
+     * Edit project hook
+     * <p/>
+     * Edits a hook for a specified project.
+     * <p/>
+     * PUT /projects/:id/hooks/:hook_id
+     * Parameters:
+     * <p/>
+     * id (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * hook_id (required) - The ID of a project hook
+     * url (required) - The hook URL
+     * push_events - Trigger hook on push events
+     * issues_events - Trigger hook on issues events
+     * merge_requests_events - Trigger hook on merge_requests events
+     */
+    @PUT("/projects/{id}/hooks/{hook_id}")
+    public void editProjectHook(
+            @Path("id") String id,
+            @Path("hook_id") int hook_id,
+            @Field("url") String url,
+            @Field("push_events") boolean push_events,
+            @Field("issues_events") boolean issues_events,
+            @Field("merge_requests_events") boolean merge_requests_events);
+
+    /**
+     * Delete project hook
+     * <p/>
+     * Removes a hook from a project. This is an idempotent method and can be called multiple times. Either the hook is available or not.
+     * <p/>
+     * DELETE /projects/:id/hooks/:hook_id
+     * <p/>
+     * Note the JSON response differs if the hook is available or not. If the project hook is available before it is returned in the JSON response or an empty response is returned.
+     *
+     * @param id      (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param hook_id (required) - The ID of hook to delete
+     */
+    @DELETE("/projects/{id}/hooks/{hook_id}")
+    public void deleteProjectHook(@Path("id") String id, @Path("hook_id") int hook_id);
+
+    /**
+     * List branches
+     * <p/>
+     * Lists all branches of a project.
+     * <p/>
+     * GET /projects/:id/repository/branches
+     * Parameters:
+     * <p/>
+     *
+     * @param id (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     */
+    @GET("/projects/{id}/repository/branches")
+    public void listBranches(@Path("id") String id);
+
+    /**
+     * List single branch
+     * <p/>
+     * Lists a specific branch of a project.
+     * <p/>
+     * GET /projects/:id/repository/branches/:branch
+     * Parameters:
+     * <p/>
+     *
+     * @param id     (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param branch (required) - The name of the branch.
+     */
+    @GET("/projects/{id}/repository/branches/{branch}")
+    public void listSingleBranch(@Path("id") String id, @Path("branch") String branch);
 
 }
