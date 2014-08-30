@@ -14,6 +14,7 @@ import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 /**
  * Gitlab Api implement with retrofit.
@@ -28,8 +29,6 @@ public interface GitLabService {
      * Get a list of users.
      * <p/>
      * This function takes pagination parameters page and per_page to restrict the list of users.
-     *
-     * @param callback
      */
     @GET("/users")
     public void listUsers(Callback<List<GitlabUser>> callback);
@@ -39,8 +38,7 @@ public interface GitLabService {
      * <p/>
      * Get a single user.
      *
-     * @param userId   (required) - The ID of a user
-     * @param callback
+     * @param userId (required) - The ID of a user
      */
     @GET("/users")
     public void singleUser(int userId, Callback<GitlabUser> callback);
@@ -51,9 +49,6 @@ public interface GitLabService {
      * Creates a new user. Note only administrators can create new users.
      * <p/>
      * POST /users
-     *
-     * @param user
-     * @param callback
      */
     @POST("/users")
     public void createUser(@Body GitlabUser user, Callback callback);
@@ -65,9 +60,6 @@ public interface GitLabService {
      * Modifies an existing user. Only administrators can change attributes of a user.
      * <p/>
      * PUT /users/:id
-     *
-     * @param user
-     * @param callback
      */
     @PUT("/users/{id}")
     public void modifyUser(@Body GitlabUser user,
@@ -85,8 +77,7 @@ public interface GitLabService {
      * <p/>
      * DELETE /users/:id
      *
-     * @param userId   (required) - The ID of the user
-     * @param callback
+     * @param userId (required) - The ID of the user
      */
     @DELETE("/users/{id}")
     public void deleteUser(@Path("id") int userId, Callback callback);
@@ -95,8 +86,6 @@ public interface GitLabService {
      * Current user
      * <p/>
      * Gets currently authenticated user.
-     *
-     * @param callback
      */
     @GET("/user")
     public void currentUser(Callback callback);
@@ -105,8 +94,6 @@ public interface GitLabService {
      * List SSH keys
      * <p/>
      * Get a list of currently authenticated user's SSH keys.
-     *
-     * @param callback
      */
     @GET("/user/keys")
     public void listSshKeys(Callback<List<GitlabSshKey>> callback);
@@ -118,8 +105,7 @@ public interface GitLabService {
      * <p/>
      * GET /users/:uid/keys
      *
-     * @param userId   (required) - id of specified user
-     * @param callback
+     * @param userId (required) - id of specified user
      */
     @GET("users/{userId}/keys")
     public void listSshKeysForUser(@Path("userId") int userId,
@@ -130,8 +116,7 @@ public interface GitLabService {
      * <p/>
      * Get a single key.
      *
-     * @param keyId    (required) - The ID of an SSH key
-     * @param callback
+     * @param keyId (required) - The ID of an SSH key
      */
     @GET("/user/keys/{keyId}")
     public void singleSshKey(@Path("keyId") int keyId, Callback<GitlabSshKey> callback);
@@ -143,9 +128,8 @@ public interface GitLabService {
      * <p/>
      * POST /user/keys
      *
-     * @param title    (required) - new SSH Key's title
-     * @param key      (required) - new SSH key
-     * @param callback
+     * @param title (required) - new SSH Key's title
+     * @param key   (required) - new SSH key
      */
     public void addSshKey(String title, String key, Callback callback);
 
@@ -158,10 +142,9 @@ public interface GitLabService {
      * <p/>
      * POST /users/:id/keys
      *
-     * @param title    (required) - new SSH Key's title
-     * @param key      (required) - new SSH key
-     * @param userId   (required) - id of specified user
-     * @param callback
+     * @param title  (required) - new SSH Key's title
+     * @param key    (required) - new SSH key
+     * @param userId (required) - id of specified user
      */
     @POST("/users/{id}/keys")
     public void addSshKeyForUser(@Field("title") String title,
@@ -178,8 +161,7 @@ public interface GitLabService {
      * <p/>
      * DELETE /user/keys/:id
      *
-     * @param keyId    (required) - SSH key ID
-     * @param callback
+     * @param keyId (required) - SSH key ID
      */
     @DELETE("/user/keys/{id}")
     public void deleteKeyForCurrentUser(@Path("id") int keyId, Callback callback);
@@ -192,10 +174,6 @@ public interface GitLabService {
      * DELETE /users/:uid/keys/:id
      * <p/>
      * Will return 200 OK on success, or 404 Not found if either user or key cannot be found.
-     *
-     * @param userId
-     * @param keyId
-     * @param callback
      */
     @DELETE("/users/{userId}/keys/{keyId}")
     public void deleteKeyForGivenUser(@Path("userId") int userId,
@@ -324,16 +302,172 @@ public interface GitLabService {
      * @param visibilityLevel     (optional)
      * @param importUrl           (optional)
      */
-    public void createProject(@Field("name") String name,
-                              @Field("namespace_id") String namespaceId,
-                              @Field("description") String description,
-                              @Field("issues_enabled") boolean issuesEnabled,
-                              @Field("merge_request_enabled") boolean mergeRequestEnabled,
-                              @Field("wiki_enabled") boolean wikiEnabled,
-                              @Field("snippets_enabled") boolean snippetsEnabled,
-                              @Field("public") boolean isPublic,
-                              @Field("visibility_level") int visibilityLevel,
-                              @Field("import_url") String importUrl);
+    public void createProject(
+            @Field("name") String name,
+            @Field("namespace_id") String namespaceId,
+            @Field("description") String description,
+            @Field("issues_enabled") boolean issuesEnabled,
+            @Field("merge_request_enabled") boolean mergeRequestEnabled,
+            @Field("wiki_enabled") boolean wikiEnabled,
+            @Field("snippets_enabled") boolean snippetsEnabled,
+            @Field("public") boolean isPublic,
+            @Field("visibility_level") int visibilityLevel,
+            @Field("import_url") String importUrl);
+
+    /**
+     * Create project for user
+     * <p/>
+     * Creates a new project owned by the specified user. Available only for admins.
+     * <p/>
+     * POST /projects/user/:user_id
+     * Parameters:
+     * <p/>
+     *
+     * @param userId              (required) - user_id of owner
+     * @param name                (required) - new project name
+     * @param namespaceId         (optional) - namespace for the new project (defaults to user)
+     * @param description         (optional) - short project description
+     * @param issuesEnabled       (optional)
+     * @param mergeRequestEnabled (optional)
+     * @param wikiEnabled         (optional)
+     * @param snippetsEnabled     (optional)
+     * @param isPublic            (optional) - if true same as setting visibility_level = 20
+     * @param visibilityLevel     (optional)
+     * @param importUrl           (optional)
+     */
+    @POST("/projects/user/{userId}")
+    public void createProjectForUser(
+            @Path("userId") String userId,
+            @Field("name") String name,
+            @Field("namespace_id") String namespaceId,
+            @Field("description") String description,
+            @Field("issues_enabled") boolean issuesEnabled,
+            @Field("merge_request_enabled") boolean mergeRequestEnabled,
+            @Field("wiki_enabled") boolean wikiEnabled,
+            @Field("snippets_enabled") boolean snippetsEnabled,
+            @Field("public") boolean isPublic,
+            @Field("visibility_level") int visibilityLevel,
+            @Field("import_url") String importUrl);
+
+
+    /**
+     * Remove project
+     * <p/>
+     * Removes a project including all associated resources (issues, merge requests etc.)
+     * <p/>
+     * DELETE /projects/:id
+     *
+     * @param id (required) - The ID of a project
+     */
+    @DELETE("/projects/{id}")
+    public void deleteProject(@Path("id") int id);
+
+    /**
+     * List project team members
+     * <p/>
+     * Get a list of a project's team members.
+     * <p/>
+     * GET /projects/:id/members
+     *
+     * @param id    (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param query (optional) - Query string to search for members
+     */
+    @GET("/projects/{id}/members")
+    public void listTeamMembers(@Path("id") String id, @Query("query") String query);
+
+    /**
+     * Get project team member
+     * <p/>
+     * Gets a project team member.
+     * <p/>
+     * GET /projects/:id/members/:user_id
+     * <p/>
+     *
+     * @param id     (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param userId (required) - The ID of a user
+     */
+    @GET("/projects/{id}/members/{userId}")
+    public void getProjectTeamMember(@Path("id") String id, @Path("userId") int userId);
+
+    /**
+     * Add project team member
+     * <p/>
+     * Adds a user to a project team. This is an idempotent method and can be called
+     * multiple times with the same parameters. Adding team membership to a user
+     * that is already a member does not affect the existing membership.
+     * <p/>
+     * POST /projects/:id/members
+     *
+     * @param id           (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param user_id      (required) - The ID of a user to add
+     * @param access_level (required) - Project access level
+     */
+    @POST("/projects/{id}/members")
+    public void addProjectTeamMember(@Path("id") String id,
+                                     @Field("user_id") int user_id,
+                                     @Field("access_level") int access_level);
+
+    /**
+     * Edit project team member
+     * <p/>
+     * Updates a project team member to a specified access level.
+     * <p/>
+     * PUT /projects/:id/members/:user_id
+     * Parameters:
+     *
+     * @param id           (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param user_id      (required) - The ID of a team member
+     * @param access_level (required) - Project access level
+     */
+    @PUT("/projects/{id}/members/{user_id}")
+    public void editProjectTeamMember(@Path("id") String id,
+                                      @Path("user_id") int user_id,
+                                      @Field("access_level") int access_level);
+
+    /**
+     * Remove project team member
+     * <p/>
+     * Removes a user from a project team.
+     * <p/>
+     * DELETE /projects/:id/members/:user_id
+     * Parameters:
+     * <p/>
+     * id (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * user_id (required) - The ID of a team member
+     * This method is idempotent and can be called multiple times with the same parameters.
+     * Revoking team membership for a user who is not currently a team member
+     * is considered success. Please note that the returned JSON currently differs slightly.
+     * Thus you should not rely on the returned JSON structure.
+     */
+    @DELETE("projects/{id}/members/{user_id}")
+    public void removeProjectTeamMember(@Path("id") String id, @Path("user_id") int user_id);
+
+    /**
+     * List project hooks
+     * <p/>
+     * Get a list of project hooks.
+     * <p/>
+     * GET /projects/:id/hooks
+     *
+     * @param id (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     */
+    @GET("/projects/{id}/hooks")
+    public void listProjectHooks(@Path("id") String id);
+
+    /**
+     * Get project hook
+     * <p/>
+     * Get a specific hook for a project.
+     * <p/>
+     * GET /projects/:id/hooks/:hook_id
+     * Parameters:
+     * <p/>
+     *
+     * @param id      (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param hook_id (required) - The ID of a project hook
+     */
+    @GET("/projects/{id}/hooks/{hook_id}")
+    public void getProjectHook(String id, int hook_id);
 
 
 }
