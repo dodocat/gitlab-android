@@ -518,11 +518,15 @@ public interface GitLabService {
     /**
      * Delete project hook
      * <p/>
-     * Removes a hook from a project. This is an idempotent method and can be called multiple times. Either the hook is available or not.
+     * Removes a hook from a project.
+     * This is an idempotent method and can be called multiple times.
+     * Either the hook is available or not.
      * <p/>
      * DELETE /projects/:id/hooks/:hook_id
      * <p/>
-     * Note the JSON response differs if the hook is available or not. If the project hook is available before it is returned in the JSON response or an empty response is returned.
+     * Note the JSON response differs if the hook is available or not.
+     * If the project hook is available before it is returned in the JSON response
+     * or an empty response is returned.
      *
      * @param id      (required) - The ID or NAMESPACE/PROJECT_NAME of a project
      * @param hook_id (required) - The ID of hook to delete
@@ -558,5 +562,79 @@ public interface GitLabService {
      */
     @GET("/projects/{id}/repository/branches/{branch}")
     public void listSingleBranch(@Path("id") String id, @Path("branch") String branch);
+
+    /**
+     * Protect single branch
+     * <p/>
+     * Protects a single branch of a project.
+     * <p/>
+     * PUT /projects/:id/repository/branches/:branch/protect
+     * Parameters:
+     * <p/>
+     *
+     * @param id     (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * @param branch (required) - The name of the branch.
+     */
+    @PUT("projects/{id}/repository/branches/{branch}/protect")
+    public void protectSingleBranch(@Path("id") String id, @Path("branch") String branch);
+
+    /**
+     * Unprotect single branch
+     * <p/>
+     * Unprotect a single branch of a project.
+     * <p/>
+     * PUT /projects/:id/repository/branches/:branch/unprotect
+     * Parameters:
+     * <p/>
+     * id (required) - The ID or NAMESPACE/PROJECT_NAME of a project
+     * branch (required) - The name of the branch.
+     */
+    @PUT("projects/{id}/repository/branches/{branch}/unprotect")
+    public void unprotectSingleBranch(@Path("id") String id, @Path("branch") String branch);
+
+    /*
+    Admin fork relation
+    Allows modification of the forked relationship between existing projects. Available only for admins.
+    */
+
+    /**
+     * Create a forked from/to relation between existing projects.
+     * <p/>
+     * POST /projects/:id/fork/:forked_from_id
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of the project
+     * forked_from_id: (required) - The ID of the project that was forked from
+     */
+    @POST("/projects/{id}/fork/{forked_from_id}")
+    public void createForkRelation(@Path("id") int id, @Path("forked_from_id") int forked_from_id);
+
+    /**
+     * Delete an existing forked from relationship
+     * <p/>
+     * DELETE /projects/:id/fork
+     * Parameter:
+     * <p/>
+     * @param id (required) - The ID of the project
+     */
+    @DELETE("/projects/{id}/fork")
+    public void deleteForkRelation(@Path("id") int id);
+
+    /**
+     * Search for projects by name
+     * <p/>
+     * Search for projects by name which are accessible to the authenticated user.
+     * <p/>
+     * GET /projects/search/:query
+     * Parameters:
+     * <p/>
+     * @param query (required) - A string contained in the project name
+     * @param per_page (optional) - number of projects to return per page
+     * @param page (optional) - the page to retrieve
+     */
+    @GET("/projects/search/{query}")
+    public void searchProjectByName(@Path("query") String query,
+                                    @Query("per_page") int per_page,
+                                    @Query("page") int page);
 
 }
