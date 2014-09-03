@@ -1,6 +1,7 @@
 package org.quanqi.gitlab;
 
 import org.quanqi.gitlab.models.GitlabSession;
+import org.quanqi.gitlab.models.GitlabSnippet;
 import org.quanqi.gitlab.models.GitlabSshKey;
 import org.quanqi.gitlab.models.GitlabUser;
 
@@ -594,7 +595,8 @@ public interface GitLabService {
 
     /*
     Admin fork relation
-    Allows modification of the forked relationship between existing projects. Available only for admins.
+    Allows modification of the forked relationship between existing projects.
+    Available only for admins.
     */
 
     /**
@@ -615,6 +617,7 @@ public interface GitLabService {
      * DELETE /projects/:id/fork
      * Parameter:
      * <p/>
+     *
      * @param id (required) - The ID of the project
      */
     @DELETE("/projects/{id}/fork")
@@ -628,13 +631,389 @@ public interface GitLabService {
      * GET /projects/search/:query
      * Parameters:
      * <p/>
-     * @param query (required) - A string contained in the project name
+     *
+     * @param query    (required) - A string contained in the project name
      * @param per_page (optional) - number of projects to return per page
-     * @param page (optional) - the page to retrieve
+     * @param page     (optional) - the page to retrieve
      */
     @GET("/projects/search/{query}")
     public void searchProjectByName(@Path("query") String query,
                                     @Query("per_page") int per_page,
                                     @Query("page") int page);
 
+    /**
+     * List snippets
+     * <p/>
+     * Get a list of project snippets.
+     * <p/>
+     * GET /projects/:id/snippets
+     * Parameters:
+     * <p/>
+     *
+     * @param id (required) - The ID of a project
+     */
+    @GET("/projects/{id}/snippets")
+    public void listSnippets(@Path("id") int id,
+                             @Query("per_page") int perPage,
+                             @Query("page") int page,
+                             Callback<List<GitlabSnippet>> callback);
+
+    /**
+     * Single snippet
+     * <p/>
+     * Get a single project snippet.
+     * <p/>
+     * GET /projects/:id/snippets/:snippet_id
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * snippet_id (required) - The ID of a project's snippet
+     */
+    @GET("projects/{id}/snippets/{snippet_id}")
+    public void getSnippet(@Path("id") int id,
+                           @Path("snippet_id") int snippet_id,
+                           Callback<GitlabSnippet> callback);
+
+
+    /**
+     * Create new snippet
+     * <p/>
+     * Creates a new project snippet. The user must have permission to create new snippets.
+     * <p/>
+     * POST /projects/:id/snippets
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * title (required) - The title of a snippet
+     * file_name (required) - The name of a snippet file
+     * code (required) - The content of a snippet
+     */
+    @POST("/projects/{id}/snippets")
+    public void createSnippet(@Path("id") int id,
+                              @Field("title") String title,
+                              @Field("file_name") String file_name,
+                              @Field("code") String Code,
+                              Callback callback);
+
+    /**
+     * Update snippet
+     * <p/>
+     * Updates an existing project snippet.
+     * The user must have permission to change an existing snippet.
+     * <p/>
+     * PUT /projects/:id/snippets/:snippet_id
+     * Parameters:
+     * <p/>
+     *
+     * @param id         (required) - The ID of a project
+     * @param snippet_id (required) - The ID of a project's snippet
+     * @param title      (optional) - The title of a snippet
+     * @param file_name  (optional) - The name of a snippet file
+     * @param code       (optional) - The content of a snippet
+     */
+    @PUT("/projects/{id}/snippets/{snippet_id}")
+    public void updateSnippet(@Path("id") int id,
+                              @Path("snippet_id") int snippet_id,
+                              @Field("title") String title,
+                              @Field("file_name") String file_name,
+                              @Field("code") String code,
+                              Callback callback);
+
+    /**
+     * Delete snippet
+     * <p/>
+     * Deletes an existing project snippet.
+     * This is an idempotent function and deleting a non-existent snippet still
+     * returns a 200 OK status code.
+     * <p/>
+     * DELETE /projects/:id/snippets/:snippet_id
+     * Parameters:
+     * <p/>
+     *
+     * @param id         (required) - The ID of a project
+     * @param snippet_id (required) - The ID of a project's snippet
+     */
+    @DELETE("/projects/{id}/snippets/{snippet_id}")
+    public void deleteSnippet(@Path("id") int id,
+                              @Path("snippet_id") int snippet_id);
+
+    /**
+     * Snippet content
+     * <p/>
+     * Returns the raw project snippet as plain text.
+     * <p/>
+     * GET /projects/:id/snippets/:snippet_id/raw
+     * Parameters:
+     * <p/>
+     *
+     * @param id         (required) - The ID of a project
+     * @param snippet_id (required) - The ID of a project's snippet
+     */
+    @GET("/projects/{id}/snippets/{snippet_id}/raw")
+    public void getSnippetContent(@Path("id") int id, @Path("snippet_id") int snippet_id);
+
+    /**
+     * List project repository tags
+     * <p/>
+     * Get a list of repository tags from a project, sorted by name in reverse alphabetical order.
+     * <p/>
+     * GET /projects/:id/repository/tags
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     */
+    @GET("/projects/{id}/repository/tags")
+    public void listRepoTags(@Path("id") int id);
+
+    /**
+     * Create a new tag
+     * <p/>
+     * Creates new tag in the repository that points to the supplied ref.
+     * <p/>
+     * POST /projects/:id/repository/tags
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * tag_name (required) - The name of a tag
+     * ref (required) - Create tag using commit SHA, another tag name, or branch name.
+     */
+    @POST("/projects/{id}/repository/tags")
+    public void createTag(@Path("id") int id,
+                          @Field("tag_name") String tag_name,
+                          @Field("ref") String ref);
+
+    /**
+     * List repository tree
+     * <p/>
+     * Get a list of repository files and directories in a project.
+     * <p/>
+     * GET /projects/:id/repository/tree
+     * Parameters:
+     * <p/>
+     *
+     * @param id       (required) - The ID of a project
+     * @param path     (optional) - The path inside repository.
+     *                 Used to get contend of subdirectories
+     * @param ref_name (optional) - The name of a repository branch or tag or
+     *                 if not given the default branch
+     */
+    @GET("@/projects/{id}/repository/tree")
+    public void listRepository(int id, String path, String ref_name);
+
+    /**
+     * Raw file content
+     * <p/>
+     * Get the raw file contents for a file by commit SHA and path.
+     * <p/>
+     * GET /projects/:id/repository/blobs/:sha
+     * Parameters:
+     * <p/>
+     *
+     * @param id       (required) - The ID of a project
+     * @param sha      (required) - The commit or branch name
+     * @param filepath (required) - The path the file
+     */
+    @GET("/projects/{id}/repository/blobs/{sha}")
+    public void getRawFileContent(@Path("id") int id,
+                                  @Path("sha") String sha,
+                                  @Query("filepath") String filepath);
+
+    /**
+     * Raw blob content
+     * <p/>
+     * Get the raw file contents for a blob by blob SHA.
+     * <p/>
+     * GET /projects/:id/repository/raw_blobs/:sha
+     * Parameters:
+     * <p/>
+     *
+     * @param id  (required) - The ID of a project
+     * @param sha (required) - The blob SHA
+     */
+    @GET("GET /projects/{id}/repository/raw_blobs/{sha}")
+    public void getRawBlobContent(@Path("id") int id, @Path("sha") String sha);
+
+    /**
+     * Get file archive
+     * <p/>
+     * Get an archive of the repository
+     * <p/>
+     * GET /projects/:id/repository/archive
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * sha (optional) - The commit SHA to download defaults to the tip of the default branch
+     */
+    @GET("/projects/{id}/repository/archive")
+    public void getFileArchive(@Path("id") int id, @Query("sha") String sha);
+
+    /**
+     * Compare branches, tags or commits
+     * <p/>
+     * GET /projects/:id/repository/compare
+     * Parameters:
+     * <p/>
+     *
+     * @param id   (required) - The ID of a project
+     * @param from (required) - the commit SHA or branch name
+     * @param to   (required) - the commit SHA or branch name
+     *             GET /projects/:id/repository/compare?from=master&to=feature
+     *             Response:
+     *             <p/>
+     *             {
+     *             "commit": {
+     *             "id": "12d65c8dd2b2676fa3ac47d955accc085a37a9c1",
+     *             "short_id": "12d65c8dd2b",
+     *             "title": "JS fix",
+     *             "author_name": "Dmitriy Zaporozhets",
+     *             "author_email": "dmitriy.zaporozhets@gmail.com",
+     *             "created_at": "2014-02-27T10:27:00+02:00"
+     *             },
+     *             "commits": [{
+     *             "id": "12d65c8dd2b2676fa3ac47d955accc085a37a9c1",
+     *             "short_id": "12d65c8dd2b",
+     *             "title": "JS fix",
+     *             "author_name": "Dmitriy Zaporozhets",
+     *             "author_email": "dmitriy.zaporozhets@gmail.com",
+     *             "created_at": "2014-02-27T10:27:00+02:00"
+     *             }],
+     *             "diffs": [{
+     *             "old_path": "files/js/application.js",
+     *             "new_path": "files/js/application.js",
+     *             "a_mode": null,
+     *             "b_mode": "100644",
+     *             "diff": "--- a/files/js/application.js\n+++ b/files/js/application.js\n@@ -24,8 +24,10 @@\n //= require g.raphael-min\n //= require g.bar-min\n //= require branch-graph\n-//= require highlightjs.min\n-//= require ace/ace\n //= require_tree .\n //= require d3\n //= require underscore\n+\n+function fix() { \n+  alert(\"Fixed\")\n+}",
+     *             "new_file": false,
+     *             "renamed_file": false,
+     *             "deleted_file": false
+     *             }],
+     *             "compare_timeout": false,
+     *             "compare_same_ref": false
+     *             }
+     */
+
+    @GET("/projects/{id}/repository/compare")
+    public void compare(@Path("id") int id,
+                        @Query("from") String from,
+                        @Query("to") String to);
+
+    /**
+     * Contributors
+     * <p/>
+     * Get repository contributors list
+     * <p/>
+     * GET /projects/:id/repository/contributors
+     * Parameters:
+     * <p/>
+     *
+     * @param id (required) - The ID of a project
+     */
+    @GET("/projects/{id}/repository/contributors")
+    public void getContributors(@Path("id") int id);
+
+    /**
+     * Get file from repository
+     * <p/>
+     * Allows you to receive information about file in repository like name, size, content. Note that file content is Base64 encoded.
+     * <p/>
+     * GET /projects/:id/repository/files
+     * Example response:
+     * <p/>
+     * {
+     * "file_name": "key.rb",
+     * "file_path": "app/models/key.rb",
+     * "size": 1476,
+     * "encoding": "base64",
+     * "content": "IyA9PSBTY2hlbWEgSW5mb3...",
+     * "ref": "master",
+     * "blob_id": "79f7bbd25901e8334750839545a9bd021f0e4c83",
+     * "commit_id": "d5a3ff139356ce33e37e73add446f16869741b50"
+     * }
+     * Parameters:
+     * <p/>
+     * file_path (required) - Full path to new file. Ex. lib/class.rb
+     * ref (required) - The name of branch, tag or commit
+     */
+    @GET("/projects/{id}/repository/files")
+    public void getFile(@Path("id") int id,
+                        @Query("file_path") String file_path,
+                        @Query("ref") String ref);
+
+    /**
+     * Create new file in repository
+     * <p/>
+     * POST /projects/:id/repository/files
+     * Example response:
+     * <p/>
+     * {
+     * "file_name": "app/project.rb",
+     * "branch_name": "master"
+     * }
+     * Parameters:
+     * <p/>
+     * file_path (required) - Full path to new file. Ex. lib/class.rb
+     * branch_name (required) - The name of branch
+     * encoding (optional) - 'text' or 'base64'. Text is default.
+     * content (required) - File content
+     * commit_message (required) - Commit message
+     */
+    @POST("/projects/:id/repository/files")
+    public void createFile(@Path("id") int id,
+                           @Field("file_name") String file_name,
+                           @Field("branch_name") String branch_name);
+
+    /**
+     * Update existing file in repository
+     * <p/>
+     * PUT /projects/:id/repository/files
+     * Example response:
+     * <p/>
+     * {
+     * "file_name": "app/project.rb",
+     * "branch_name": "master"
+     * }
+     * Parameters:
+     * <p/>
+     * file_path (required) - Full path to file. Ex. lib/class.rb
+     * branch_name (required) - The name of branch
+     * encoding (optional) - 'text' or 'base64'. Text is default.
+     * content (required) - New file content
+     * commit_message (required) - Commit message
+     * If the commit fails for any reason we return a 400 error with a non-specific error message. Possible causes for a failed commit include:
+     * <p/>
+     * the file_path contained /../ (attempted directory traversal);
+     * the new file contents were identical to the current file contents, i.e. the user tried to make an empty commit;
+     * the branch was updated by a Git push while the file edit was in progress.
+     * Currently gitlab-shell has a boolean return code, preventing GitLab from specifying the error.
+     */
+    @PUT("/projects/{id}/repository/files")
+    public void updateFile(
+            @Path("id") int id,
+            @Field("file_name") String file_name,
+            @Field("branch_name") String branch_name,
+            @Field("content") String content,
+            @Field("encoding") String encoding,
+            @Field("commit_message") String commit_message);
+
+    /**
+     * Delete existing file in repository
+     * <p/>
+     * DELETE /projects/:id/repository/files
+     * Example response:
+     * <p/>
+     * {
+     * "file_name": "app/project.rb",
+     * "branch_name": "master"
+     * }
+     * Parameters:
+     * <p/>
+     * file_path (required) - Full path to file. Ex. lib/class.rb
+     * branch_name (required) - The name of branch
+     * commit_message (required) - Commit message
+     */
+    @DELETE("/projects/{id}/repository/files")
+    public void deleteFile(
+            @Path("id") int id,
+            @Field("file_path") String file_path,
+            @Field("commit_message") String commit_message);
 }
