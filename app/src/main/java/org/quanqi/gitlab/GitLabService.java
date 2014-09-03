@@ -1016,4 +1016,155 @@ public interface GitLabService {
             @Path("id") int id,
             @Field("file_path") String file_path,
             @Field("commit_message") String commit_message);
+
+    /**
+     * List repository commits
+     * <p/>
+     * Get a list of repository commits in a project.
+     * <p/>
+     * GET /projects/:id/repository/commits
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * ref_name (optional) - The name of a repository branch or tag or if not given the default branch
+     * [
+     * {
+     * "id": "ed899a2f4b50b4370feeea94676502b42383c746",
+     * "short_id": "ed899a2f4b5",
+     * "title": "Replace sanitize with escape once",
+     * "author_name": "Dmitriy Zaporozhets",
+     * "author_email": "dzaporozhets@sphereconsultinginc.com",
+     * "created_at": "2012-09-20T11:50:22+03:00",
+     * "message": "Replace sanitize with escape once"
+     * },
+     * {
+     * "id": "6104942438c14ec7bd21c6cd5bd995272b3faff6",
+     * "short_id": "6104942438c",
+     * "title": "Sanitize for network graph",
+     * "author_name": "randx",
+     * "author_email": "dmitriy.zaporozhets@gmail.com",
+     * "created_at": "2012-09-20T09:06:12+03:00",
+     * "message": "Sanitize for network graph"
+     * }
+     * ]
+     */
+    @GET("/projects/{id}/repository/commits")
+    public void listCommits(@Path("id") int id, @Query("ref") String ref);
+
+    /**
+     * Get a single commit
+     * <p/>
+     * Get a specific commit identified by the commit hash or name of a branch or tag.
+     * <p/>
+     * GET /projects/:id/repository/commits/:sha
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * sha (required) - The commit hash or name of a repository branch or tag
+     * {
+     */
+    @GET("/projects/{id}/repository/commits/{sha}")
+    public void getCommit(@Path("id") int id, @Path("sha") String sha);
+
+    /**
+     * Get the diff of a commit
+     * <p/>
+     * Get the diff of a commit in a project.
+     * <p/>
+     * GET /projects/:id/repository/commits/:sha/diff
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * sha (required) - The name of a repository branch or tag or if not given the default branch
+     */
+    @GET("/projects/{id}/repository/commits/{sha}/diff")
+    public void getDiffOfCommit(@Path("id") int id, @Path("sha") String sha);
+
+    /**
+     * List repository branches
+     * <p/>
+     * Get a list of repository branches from a project, sorted by name alphabetically.
+     * <p/>
+     * GET /projects/:id/repository/branches
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     */
+    @GET("/projects/{id}/repository/branches")
+    public void listBranches(@Path("id") int id);
+
+
+    /**
+     * Get single repository branch
+     * <p/>
+     * Get a single project repository branch.
+     * <p/>
+     * GET /projects/:id/repository/branches/:branch
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * branch (required) - The name of the branch
+     *
+     * @param id
+     * @param branch
+     */
+    @GET("/projects/{id}/repository/branches/{branch}")
+    public void getBranch(@Path("id") int id, @Path("branch") String branch);
+
+    /**
+     * Protect repository branch
+     * <p/>
+     * Protects a single project repository branch. This is an idempotent function, protecting an already protected repository branch still returns a 200 OK status code.
+     * <p/>
+     * PUT /projects/:id/repository/branches/:branch/protect
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * branch (required) - The name of the branch
+     */
+    @PUT("/projects/{id}/repository/branches/{branch}/protect")
+    public void protectBranch(@Path("id") int id, @Path("branch") String branch);
+
+    /**
+     * Unprotect repository branch
+     * <p/>
+     * Unprotects a single project repository branch. This is an idempotent function, unprotecting an already unprotected repository branch still returns a 200 OK status code.
+     * <p/>
+     * PUT /projects/:id/repository/branches/:branch/unprotect
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * branch (required) - The name of the branch
+     */
+    @PUT("projects/{id}/repository/branches/{branch}/unprotect")
+    public void unprotectBranch(@Path("id") int id, @Path("branch") String branch);
+
+
+    /**
+     * Create repository branch
+     * <p/>
+     * POST /projects/:id/repository/branches
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * branch_name (required) - The name of the branch
+     * ref (required) - Create branch from commit SHA or existing branch
+     */
+    @POST("/projects/:id/repository/branches")
+    public void createBranch(@Path("id") int id,
+                             @Field("branch_name") String branch_name,
+                             @Field("ref") String ref);
+
+    /**
+     * Delete repository branch
+     * <p/>
+     * DELETE /projects/:id/repository/branches/:branch
+     * Parameters:
+     * <p/>
+     * id (required) - The ID of a project
+     * branch (required) - The name of the branch
+     * It return 200 if succeed or 405 if failed with error message explaining reason.
+     */
+    @DELETE("/projects/{id}/repository/branches/{branch}")
+    public void deleteBranch(@Path("id") int id, @Path("branch") String branch);
 }

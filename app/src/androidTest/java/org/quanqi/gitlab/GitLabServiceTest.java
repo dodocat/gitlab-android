@@ -1,11 +1,47 @@
 package org.quanqi.gitlab;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+
 import junit.framework.TestCase;
+
+import org.quanqi.gitlab.models.GitlabUser;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+
+import retrofit.Callback;
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class GitLabServiceTest extends TestCase {
 
+    public static final String TAG = "GitLabServiceTest";
+
+    public static final String PRIVATE_TOKEN = "Ngz1rqMMSsomp4yttRm3";
+    public static final String END_POINT = "https://gitlab.com/api/v3";
+
+    RestAdapter restAdapter;
+    private GitLabService gitLabService;
+
     public void setUp() throws Exception {
         super.setUp();
+        Log.e(TAG, "Setting up GitLabServiceTest");
+
+        RestAdapter.Builder builder = new RestAdapter.Builder();
+        builder.setEndpoint(END_POINT);
+        builder.setRequestInterceptor(new RequestInterceptor() {
+            @Override
+            public void intercept(RequestFacade request) {
+                request.addQueryParam("private_token", PRIVATE_TOKEN);
+            }
+        });
+
+        restAdapter = builder.build();
+        gitLabService = restAdapter.create(GitLabService.class);
 
     }
 
@@ -14,11 +50,45 @@ public class GitLabServiceTest extends TestCase {
     }
 
     public void testListUsers() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
 
+        gitLabService.listUsers(new Callback<List<GitlabUser>>() {
+            @Override
+            public void success(List<GitlabUser> gitlabUsers, Response response) {
+                signal.countDown();
+                Log.i(TAG, "list users successfully.");
+                for (GitlabUser user : gitlabUsers) {
+                    Log.i(TAG, "user: " + user.getName() +
+                            " id: " + user.getId() + " email: " + user.getEmail());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                signal.countDown();
+                throw error;
+            }
+        });
+        signal.await();
     }
 
     public void testSingleUser() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
 
+        gitLabService.singleUser(49506, new Callback<GitlabUser>() {
+            @Override
+            public void success(GitlabUser user, Response response) {
+                Log.i(TAG, "get single user: " + user.getName());
+                signal.countDown();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                signal.countDown();
+                throw error;
+            }
+        });
+        signal.await();
     }
 
     public void testCreateUser() throws Exception {
@@ -136,4 +206,6 @@ public class GitLabServiceTest extends TestCase {
     public void testGetProjectHook() throws Exception {
 
     }
+
+
 }
