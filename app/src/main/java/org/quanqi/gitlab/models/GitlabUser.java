@@ -10,248 +10,249 @@ public class GitlabUser {
     public static String USERS_URL = "/users";
     public static String USER_URL = "/user"; // for sudo based ops
 
-    private Integer _id;
-    private String _username;
-    private String _email;
-    private String _name;
-    private String _skype;
-    private String _linkedin;
-    private String _twitter;
-    private String _provider;
-    private String _state;
-    private boolean _blocked;
+    private int id;
+    private String username;
+    private String email;
+    private String name;
+    private String skype;
+    private String linkedin;
+    private String twitter;
+    private String provider;
+    private String state;
+    private boolean blocked;
     
     @SerializedName("private_token")
-    private String _privateToken;
+    private String privateToken;
     
     @SerializedName("color_scheme_id")
-    private Integer _colorSchemeId;
+    private int colorSchemeId;
     
-    @SerializedName("provider")
-    private String _externProviderName;
+    //@SerializedName("provider")
+    private String externProviderName;
     
     @SerializedName("website_url")
-    private String _websiteUrl;
+    private String websiteUrl;
 
     @SerializedName("created_at")
-    private Date _createdAt;
+    private Date createdAt;
 
     @SerializedName("bio")
-    private String _bio;
+    private String bio;
 
     @SerializedName("dark_scheme")
-    private boolean _darkScheme;
+    private boolean darkScheme;
 
     @SerializedName("theme_id")
-    private Integer _themeId;
+    private Integer themeId;
 
     @SerializedName("extern_uid")
-    private String _externUid;
+    private String externUid;
 
     @SerializedName("is_admin")
-    private boolean _isAdmin;
+    private boolean isAdmin;
 
     @SerializedName("can_create_group")
-    private boolean _canCreateGroup;
+    private boolean canCreateGroup;
 
     @SerializedName("can_create_project")
-    private boolean _canCreateProject;
+    private boolean canCreateProject;
 
     @SerializedName("can_create_team")
-    private boolean _canCreateTeam;
+    private boolean canCreateTeam;
     
     @SerializedName("avatar_url")
-    private String _avatarUrl;
+    private String avatarUrl;
 
-    public Integer getId() {
-        return _id;
+
+    public int getId() {
+        return id;
     }
 
-    public void setId(Integer id) {
-        _id = id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
-        return _username;
+        return username;
     }
 
-    public void setUsername(String userName) {
-        _username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
-        return _email;
+        return email;
     }
 
     public void setEmail(String email) {
-        _email = email;
+        this.email = email;
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
 
     public void setName(String name) {
-        _name = name;
-    }
-
-    public boolean isBlocked() {
-        return _blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        _blocked = blocked;
-    }
-
-    public Date getCreatedAt() {
-        return _createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        _createdAt = createdAt;
-    }
-
-    public String getBio() {
-        return _bio;
-    }
-
-    public void setBio(String bio) {
-        _bio = bio;
+        this.name = name;
     }
 
     public String getSkype() {
-        return _skype;
+        return skype;
     }
 
     public void setSkype(String skype) {
-        _skype = skype;
+        this.skype = skype;
     }
 
     public String getLinkedin() {
-        return _linkedin;
+        return linkedin;
     }
 
     public void setLinkedin(String linkedin) {
-        _linkedin = linkedin;
+        this.linkedin = linkedin;
     }
 
     public String getTwitter() {
-        return _twitter;
+        return twitter;
     }
 
     public void setTwitter(String twitter) {
-        _twitter = twitter;
-    }
-
-    public boolean isDarkScheme() {
-        return _darkScheme;
-    }
-
-    public void setDarkScheme(boolean darkScheme) {
-        _darkScheme = darkScheme;
-    }
-
-    public Integer getThemeId() {
-        return _themeId;
-    }
-
-    public void setThemeId(Integer themeId) {
-        _themeId = themeId;
-    }
-
-    public String getExternUid() {
-        return _externUid;
-    }
-
-    public void setExternUid(String externUid) {
-        _externUid = externUid;
+        this.twitter = twitter;
     }
 
     public String getProvider() {
-        return _provider;
+        return provider;
     }
 
     public void setProvider(String provider) {
-        _provider = provider;
+        this.provider = provider;
     }
 
     public String getState() {
-        return _state;
+        return state;
     }
 
     public void setState(String state) {
-        _state = state;
+        this.state = state;
     }
-    
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    public String getPrivateToken() {
+        return privateToken;
+    }
+
+    public void setPrivateToken(String privateToken) {
+        this.privateToken = privateToken;
+    }
+
+    public int getColorSchemeId() {
+        return colorSchemeId;
+    }
+
+    public void setColorSchemeId(int colorSchemeId) {
+        this.colorSchemeId = colorSchemeId;
+    }
+
     public String getExternProviderName() {
-        return _externProviderName;
+        return externProviderName;
     }
 
     public void setExternProviderName(String externProviderName) {
-    	_externProviderName = externProviderName;
+        this.externProviderName = externProviderName;
     }
-    
+
     public String getWebsiteUrl() {
-        return _websiteUrl;
+        return websiteUrl;
     }
 
     public void setWebsiteUrl(String websiteUrl) {
-    	_websiteUrl = websiteUrl;
+        this.websiteUrl = websiteUrl;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public boolean isDarkScheme() {
+        return darkScheme;
+    }
+
+    public void setDarkScheme(boolean darkScheme) {
+        this.darkScheme = darkScheme;
+    }
+
+    public Integer getThemeId() {
+        return themeId;
+    }
+
+    public void setThemeId(Integer themeId) {
+        this.themeId = themeId;
+    }
+
+    public String getExternUid() {
+        return externUid;
+    }
+
+    public void setExternUid(String externUid) {
+        this.externUid = externUid;
     }
 
     public boolean isAdmin() {
-        return _isAdmin;
+        return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
-        _isAdmin = admin;
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public boolean isCanCreateGroup() {
-        return _canCreateGroup;
+        return canCreateGroup;
     }
 
     public void setCanCreateGroup(boolean canCreateGroup) {
-        _canCreateGroup = canCreateGroup;
+        this.canCreateGroup = canCreateGroup;
     }
 
     public boolean isCanCreateProject() {
-        return _canCreateProject;
+        return canCreateProject;
     }
 
     public void setCanCreateProject(boolean canCreateProject) {
-        _canCreateProject = canCreateProject;
+        this.canCreateProject = canCreateProject;
     }
 
     public boolean isCanCreateTeam() {
-        return _canCreateTeam;
+        return canCreateTeam;
     }
 
     public void setCanCreateTeam(boolean canCreateTeam) {
-        _canCreateTeam = canCreateTeam;
+        this.canCreateTeam = canCreateTeam;
     }
 
-	public String getAvatarUrl() {
-		return _avatarUrl;
-	}
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
 
-	public void setAvatarUrl(String avatarUrl) {
-		this._avatarUrl = avatarUrl;
-	}
-
-	public Integer getColorSchemeId() {
-		return _colorSchemeId;
-	}
-
-	public void setColorSchemeId(Integer colorSchemeId) {
-		this._colorSchemeId = colorSchemeId;
-	}
-
-	public String getPrivateToken() {
-		return _privateToken;
-	}
-
-	public void setPrivateToken(String privateToken) {
-		this._privateToken = privateToken;
-	}
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 }

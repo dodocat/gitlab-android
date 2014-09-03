@@ -8,14 +8,14 @@ public abstract class GitlabAbstractMember extends GitlabUser {
 	public static final String URL = "/members";
 
     @SerializedName("access_level")
-	private int _accessLevel;
+	private int accessLevel;
 
 	public GitlabAccessLevel getAccessLevel() {
-		return GitlabAccessLevel.fromAccessValue(_accessLevel);
+		return GitlabAccessLevel.fromAccessValue(accessLevel);
 	}
 
 	public void setAccessLevel(GitlabAccessLevel accessLevel) {
-		_accessLevel = accessLevel.accessValue;
+		this.accessLevel = accessLevel.accessValue;
 	}
 
 }

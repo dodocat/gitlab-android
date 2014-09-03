@@ -1,19 +1,19 @@
 package org.quanqi.gitlab.models;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 public class GitlabSession extends GitlabUser {
-	public static final String URL = "/session";
-	
-	@JsonProperty("private_token")
-	private String _privateToken;
+    public static final String URL = "/session";
 
-	public String getPrivateToken() {
-		return _privateToken;
-	}
+    @SerializedName("private_token")
+    private String privateToken;
 
-	public void setPrivateToken(String privateToken) {
-		_privateToken = privateToken;
-	}
-	
+    public String getPrivateToken() {
+        return privateToken;
+    }
+
+    public void setPrivateToken(String privateToken) {
+        this.privateToken = privateToken;
+    }
+
 }
