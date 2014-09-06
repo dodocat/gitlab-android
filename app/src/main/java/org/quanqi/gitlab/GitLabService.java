@@ -8,6 +8,7 @@ import org.quanqi.gitlab.models.GitlabUser;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.Field;
@@ -23,6 +24,12 @@ import retrofit.http.Query;
  * Created by cindy on 8/29/14.
  */
 public interface GitLabService {
+
+    /**
+     *
+     */
+    @GET("/dashboard.atom")
+    public void getDashBoardFeed(Callback<Response> callback);
 
     /**
      * List users
@@ -979,12 +986,15 @@ public interface GitLabService {
      * encoding (optional) - 'text' or 'base64'. Text is default.
      * content (required) - New file content
      * commit_message (required) - Commit message
-     * If the commit fails for any reason we return a 400 error with a non-specific error message. Possible causes for a failed commit include:
+     * If the commit fails for any reason we return a 400 error with a non-specific error message.
+     * Possible causes for a failed commit include:
      * <p/>
      * the file_path contained /../ (attempted directory traversal);
-     * the new file contents were identical to the current file contents, i.e. the user tried to make an empty commit;
+     * the new file contents were identical to the current file contents, i.e. the user tried
+     * to make an empty commit;
      * the branch was updated by a Git push while the file edit was in progress.
-     * Currently gitlab-shell has a boolean return code, preventing GitLab from specifying the error.
+     * Currently gitlab-shell has a boolean return code,
+     * preventing GitLab from specifying the error.
      */
     @PUT("/projects/{id}/repository/files")
     public void updateFile(
@@ -1114,7 +1124,8 @@ public interface GitLabService {
     /**
      * Protect repository branch
      * <p/>
-     * Protects a single project repository branch. This is an idempotent function, protecting an already protected repository branch still returns a 200 OK status code.
+     * Protects a single project repository branch. This is an idempotent function,
+     * protecting an already protected repository branch still returns a 200 OK status code.
      * <p/>
      * PUT /projects/:id/repository/branches/:branch/protect
      * Parameters:
