@@ -6,12 +6,17 @@ import java.util.Date;
  * Created by cindy on 9/4/14.
  */
 public class ActivityEntry implements Comparable<ActivityEntry> {
-    private String author;
-    private Date updated;
-    private String thumbnail;
-    private String email;
+
+    private String title;
     private String id;
+    private Date updated;
+
+    private String author;
+    private String email;
+
     private String link;
+
+    private String thumbnail;
 
     public String getAuthor() {
         return author;
@@ -67,14 +72,24 @@ public class ActivityEntry implements Comparable<ActivityEntry> {
         return updated.compareTo(another.getUpdated());
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
     public String toString() {
-        return "author: " + author + ", Email: " + email + ", updated: " + updated
-                + ", link: " + link + ", thumb: " + thumbnail + ", id: " + id +
-                "";
+        return "title: " + title + ", author: " + author + ", Email: " + email
+                + ", updated: " + updated + ", link: " + link + ", thumb: "
+                + thumbnail + ", id: " + id;
     }
 
     public ActivityEntry copy() {
         ActivityEntry entry = new ActivityEntry();
+        entry.setTitle(this.title);
         entry.setAuthor(this.author);
         entry.setEmail(this.email);
         entry.setLink(this.link);
@@ -83,6 +98,4 @@ public class ActivityEntry implements Comparable<ActivityEntry> {
         entry.setUpdated(this.updated);
         return entry;
     }
-
-
 }

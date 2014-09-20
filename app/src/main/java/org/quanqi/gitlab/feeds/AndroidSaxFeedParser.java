@@ -41,47 +41,63 @@ public class AndroidSaxFeedParser extends BaseFeedParser {
                 messages.add(currentEntry.copy());
             }
         });
+
+
         entry.getChild(XML_NS, "link").setStartElementListener(new StartElementListener() {
             @Override
             public void start(Attributes attributes) {
                 currentEntry.setLink(attributes.getValue("href"));
             }
         });
-        entry.getChild(XML_NS, "updated").setEndTextElementListener(new EndTextElementListener() {
-            @Override
-            public void end(String body) {
-                try {
-                    currentEntry.setUpdated(new ISO8601DateFormat().parse(body));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+        entry.getChild(XML_NS, "updated")
+                .setEndTextElementListener(new EndTextElementListener() {
+                    @Override
+                    public void end(String body) {
+                        try {
+                            currentEntry.setUpdated(new ISO8601DateFormat().parse(body));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
         entry.getChild(XML_NS, "id").setEndTextElementListener(new EndTextElementListener() {
             @Override
             public void end(String body) {
                 currentEntry.setId(body);
             }
         });
-        entry.getChild("http://search.yahoo.com/mrss/", "thumbnail").setStartElementListener(new StartElementListener() {
-            @Override
-            public void start(Attributes attributes) {
-                currentEntry.setThumbnail(attributes.getValue("url"));
-            }
-        });
-        entry.getChild(XML_NS, "author").getChild(XML_NS, "name").setEndTextElementListener(new EndTextElementListener() {
+
+        entry.getChild(XML_NS, "title").setEndTextElementListener(new EndTextElementListener() {
             @Override
             public void end(String body) {
-                currentEntry.setAuthor(body);
+                currentEntry.setTitle(body);
             }
         });
 
-        entry.getChild(XML_NS, "author").getChild(XML_NS, "email").setEndTextElementListener(new EndTextElementListener() {
-            @Override
-            public void end(String body) {
-                currentEntry.setEmail(body);
-            }
-        });
+        entry.getChild("http://search.yahoo.com/mrss/", "thumbnail")
+                .setStartElementListener(new StartElementListener() {
+                    @Override
+                    public void start(Attributes attributes) {
+                        currentEntry.setThumbnail(attributes.getValue("url"));
+                    }
+                });
+        entry.getChild(XML_NS, "author").getChild(XML_NS, "name")
+                .setEndTextElementListener(new EndTextElementListener() {
+                    @Override
+                    public void end(String body) {
+                        currentEntry.setAuthor(body);
+                    }
+                });
+
+        entry.getChild(XML_NS, "author").getChild(XML_NS, "email")
+                .setEndTextElementListener(new EndTextElementListener() {
+                    @Override
+                    public void end(String body) {
+                        currentEntry.setEmail(body);
+                    }
+                });
 
         try {
             Xml.parse(this.getInputStream(), Xml.Encoding.UTF_8,
