@@ -2,35 +2,36 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="72dp"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_alignParentLeft="true"
-        android:src="@android:drawable/ic_btn_speak_now"
-        android:layout_margin="24dp"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:id="@+id/imageView" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="14dp" />
 
     <TextView
-        android:text="14:20"
-        android:textSize="14sp"
+        android:id="@+id/event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView"
+        android:layout_alignTop="@+id/imageView"
         android:layout_toEndOf="@+id/imageView"
-        android:id="@+id/textView2" />
+        android:layout_toRightOf="@+id/imageView"
+        android:text="Dodocat push master to Gitlab-Android"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
 
     <TextView
-        android:layout_marginTop="24dp"
+        android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
-
+        android:layout_alignLeft="@+id/event"
+        android:layout_alignStart="@+id/event"
+        android:layout_below="@+id/event"
+        android:layout_marginTop="8dp"
+        android:text="14:20"
+        android:textColor="#999999"
+        android:textSize="14sp" />
 </RelativeLayout>

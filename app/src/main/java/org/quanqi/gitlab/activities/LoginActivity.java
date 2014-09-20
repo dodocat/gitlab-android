@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,6 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.quanqi.gitlab.MainActivity;
 import org.quanqi.gitlab.R;
 
 /**
@@ -97,6 +100,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         if (mAuthTask != null) {
             return;
         }
