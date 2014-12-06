@@ -4,38 +4,38 @@ import com.google.gson.annotations.SerializedName;
 
 
 public class GitlabBranch {
-	public final static String URL = "/repository/branches/";
-	
-	@SerializedName("name")
+    public final static String URL = "/repository/branches/";
+
+    @SerializedName("name")
     private String _name;
 
-    	@SerializedName("commit")
-    	private GitlabBranchCommit _commit;
-	
-	@SerializedName("protected")
-	private boolean _protected;
+    @SerializedName("commit")
+    private GitlabBranchCommit _commit;
 
-	public String getName() {
-		return _name;
-	}
+    @SerializedName("protected")
+    private boolean _protected;
 
-	public void setName(String name) {
-		this._name = name;
-	}
+    public String getName() {
+        return _name;
+    }
 
-	public GitlabBranchCommit getCommit() {
-		return _commit;
-	}
+    public void setName(String name) {
+        this._name = name;
+    }
 
-	public void setCommit(GitlabBranchCommit commit) {
-		this._commit = commit;
-	}
+    public GitlabBranchCommit getCommit() {
+        return _commit;
+    }
 
-	public boolean isProtected() {
-		return _protected;
-	}
+    public void setCommit(GitlabBranchCommit commit) {
+        this._commit = commit;
+    }
 
-	public void setProtected(boolean isProtected) {
-		this._protected = isProtected;
-	}
+    public boolean isProtected() {
+        return _protected;
+    }
+
+    public void setProtected(boolean isProtected) {
+        this._protected = isProtected;
+    }
 }

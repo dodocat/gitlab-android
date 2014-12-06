@@ -12,6 +12,7 @@ import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
@@ -48,7 +49,7 @@ public interface GitLabService {
      *
      * @param userId (required) - The ID of a user
      */
-    @GET("/users")
+    @GET("/users/userId")
     public void singleUser(int userId, Callback<GitlabUser> callback);
 
     /**
@@ -199,6 +200,7 @@ public interface GitLabService {
      * @param email    (required if login missing) - The email of user
      * @param password (required) - Valid password
      */
+    @FormUrlEncoded
     @POST("/session")
     public void session(@Field("login") String login,
                         @Field("email") String email,

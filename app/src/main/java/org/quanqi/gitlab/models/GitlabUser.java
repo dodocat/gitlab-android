@@ -5,22 +5,49 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class GitlabUser {
+import se.emilsjolander.sprinkles.annotations.Column;
+import se.emilsjolander.sprinkles.annotations.Key;
+import se.emilsjolander.sprinkles.annotations.Table;
+
+@Table("GitlabUser")
+public class GitlabUser extends BaseModel {
     public static String URL = "/users";
     public static String USERS_URL = "/users";
     public static String USER_URL = "/user"; // for sudo based ops
 
+    @Column("id")
+    @Key
     private int id;
+
+    @Column("username")
     private String username;
+
+    @Column("email")
+    @Key
     private String email;
+
+    @Column("name")
     private String name;
+
+    @Column("skype")
     private String skype;
+
+    @Column("linkedin")
     private String linkedin;
+
+    @Column("twitter")
     private String twitter;
+
+    @Column("provider")
     private String provider;
+
+    @Column("state")
     private String state;
+
+    @Column("blocked")
     private boolean blocked;
-    
+
+    @Column("privateToken")
     @SerializedName("private_token")
     private String privateToken;
     
